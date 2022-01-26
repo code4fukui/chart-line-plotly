@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>chart-line demo</title>
+</head>
+<body style="text-align:center">
+
+<h1>chart-line tag demo by script</h1>
+
+<div id=p></div>
+
+<script type="module">
+import { ChartLine } from "./chart-line.js";
+
+const data = {
+  "A": 30,
+  "B": 20,
+  "C": 70,
+};
+const chart = new ChartLine(data);
+p.appendChild(chart);
+</script>
+
+<a href=https://github.com/code4fukui/chart-line/>src on GitHub</a>
+</body>
+ </html>
