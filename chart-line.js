@@ -5,20 +5,27 @@ class ChartLine extends HTMLElement {
   constructor(data) {
     super();
     if (data !== undefined) {
+      /*
       if (!Array.isArray(data)) {
         data = Object.keys(data).map(name => {
           return { name, value: data[name] }
         });
       }
-      this.data = data;
+      */
+      if (!Array.isArray(data[0])) {
+        this.data = [data];
+      } else {
+        this.data = data;
+      }
       console.log(this.data);
       //this.setAttribute("value", data);
     } else {
       const txt = this.textContent.trim();
       const data = CSV.toJSON(CSV.decode(txt));
+      console.log(data)
       this.textContent = "";
       if (data.length > 0) {
-        this.data = data;
+        this.data = [data];
       }
     }
     this.style.display = this.style.display || "inline-block";
@@ -40,7 +47,9 @@ class ChartLine extends HTMLElement {
     }
     const svg = this.svg = d3.select(this).append("svg");
 
-    const dataset = this.data;
+
+    const dataset = this.data[0];
+//    const dataset = this.data;
     const width = this.offsetWidth || 400;
     const height = this.offsetHeight || 400;
     const padding = 50; // margin for scale
@@ -52,13 +61,12 @@ class ChartLine extends HTMLElement {
     svg.attr("width", width).attr("height", height);
     
     //const color = d3.scaleSequential((t) => d3.hsl(t / 12 * 360, 1, .6));
-   
     const xScale = d3.scaleBand()
       .rangeRound([padding, width])
       .padding(1)
       .domain(dataset.map(d => d.name));
     const yScale = d3.scaleLinear()
-      .domain([0, d3.max(dataset, d => d.value)])
+      .domain([0, d3.max(dataset, d => parseInt(d.value))])
       .range([height - padding, padding]);
    
     svg.append("g")
@@ -68,16 +76,22 @@ class ChartLine extends HTMLElement {
     svg.append("g")
       .attr("transform", `translate(${padding},0)`)
       .call(d3.axisLeft(yScale));
-   
-    svg.append("path")
-      .datum(dataset)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(d => xScale(d.name))
-        .y(d => yScale(d.value))
-      );
+    
+    let idx = 0;
+    for (const ds of this.data) {
+      const hue = idx * 360 / (this.data.length + 1);
+      svg.append("path")
+        .datum(ds)
+        .attr("fill", "none")
+        .attr("stroke", `hsl(${hue},50%,50%`)
+        //.attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x(d => xScale(d.name))
+          .y(d => yScale(d.value))
+        );
+      idx++;
+    }
     /*
     svg.append("g")
       .selectAll("circle")
