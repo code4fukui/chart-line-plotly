@@ -2,8 +2,11 @@ import * as d3 from "https://cdn.skypack.dev/d3@7";
 import { CSV } from "https://js.sabae.cc/CSV.js";
 
 class ChartLine extends HTMLElement {
-  constructor(data) {
+  constructor(data, opt = {}) {
     super();
+    for (const name in opt) {
+      this.setAttribute(name, opt[name]);
+    }
     if (data !== undefined) {
       /*
       if (!Array.isArray(data)) {
@@ -17,12 +20,12 @@ class ChartLine extends HTMLElement {
       } else {
         this.data = data;
       }
-      console.log(this.data);
+      //console.log(this.data);
       //this.setAttribute("value", data);
     } else {
       const txt = this.textContent.trim();
       const data = CSV.toJSON(CSV.decode(txt));
-      console.log(data)
+      //console.log(data)
       this.textContent = "";
       if (data.length > 0) {
         this.data = [data];
@@ -42,14 +45,16 @@ class ChartLine extends HTMLElement {
     this.draw();
   }
   draw() {
+    if (!this.offsetWidth) {
+      setTimeout(() => this.draw());
+      return;
+    }
     if (this.svg) {
       this.svg.remove();
     }
     const svg = this.svg = d3.select(this).append("svg");
 
-
     const dataset = this.data[0];
-//    const dataset = this.data;
     const width = this.offsetWidth || 400;
     const height = this.offsetHeight || 400;
     const padding = 50; // margin for scale
@@ -61,21 +66,30 @@ class ChartLine extends HTMLElement {
     svg.attr("width", width).attr("height", height);
     
     //const color = d3.scaleSequential((t) => d3.hsl(t / 12 * 360, 1, .6));
+    const min = this.getAttribute("useMinValue") ? d3.min(dataset, d => parseFloat(d.value)) : 0;
     const xScale = d3.scaleBand()
       .rangeRound([padding, width])
       .padding(1)
       .domain(dataset.map(d => d.name));
     const yScale = d3.scaleLinear()
-      .domain([0, d3.max(dataset, d => parseInt(d.value))])
+      .domain([min, d3.max(dataset, d => parseFloat(d.value) - min) + min])
       .range([height - padding, padding]);
    
-    svg.append("g")
+    const yAxis = svg.append("g")
       .attr("transform", `translate(0, ${height - padding})`)
-      .call(d3.axisBottom(xScale));
-   
+      .attr("writing-mode", "tb")
+      .call(
+        d3.axisBottom(xScale)
+//          .tickSize(-height)
+      );
+    yAxis.selectAll("text")
+      .attr("x", "0")
+      .attr("y", "0")
+      .attr("text-anchor", "start");
+
     svg.append("g")
       .attr("transform", `translate(${padding},0)`)
-      .call(d3.axisLeft(yScale));
+      .call(d3.axisLeft(yScale).tickSize(-width + padding));
     
     let idx = 0;
     for (const ds of this.data) {
