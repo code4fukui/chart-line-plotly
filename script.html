@@ -10,32 +10,23 @@
 <script type="module">
 import { ChartLine } from "./chart-line.js";
 
-/*
-const data = [
-  { name: "A", value: 30 },
-  { name: "B", value: 20 },
-  { name: "C", value: 70 },
-];
-*/
-const data = [
-  [
+const data = {
+  "chart1": [
     { name: "A", value: 30 },
     { name: "B", value: 20 },
     { name: "C", value: 70 },
-  ], [
+  ],
+  "chart2": [
     { name: "A", value: 70 },
     { name: "B", value: 50 },
     { name: "C", value: 30 },
   ]
-];
+};
 
 const chart = new ChartLine(data);
-chart.style.width = "500px";
-chart.style.height = "400px";
 p.appendChild(chart);
 
 </script>
 
-<a href=https://github.com/code4fukui/chart-line/>src on GitHub</a>
 </body>
  </html>
