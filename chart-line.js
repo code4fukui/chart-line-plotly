@@ -1,5 +1,4 @@
 import "https://cdn.plot.ly/plotly-2.15.1.min.js";
-import { CSV } from "https://js.sabae.cc/CSV.js";
 
 const colors = [
   "#A4BBBD",
