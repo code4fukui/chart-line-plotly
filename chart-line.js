@@ -10,27 +10,30 @@ const colors = [
 ];
 
 class ChartLine extends HTMLElement {
-  constructor(data) {
+  constructor(data, options) {
     super();
     
     if (data !== undefined) {
-      this.setData(data);
+      this.setData(data, options);
     } else {
       const txt = this.textContent.trim();
       this.textContent = "";
-      this.setData(JSON.parse(txt));
+      this.setData(JSON.parse(txt), options);
     }
   }
-
-  setData(data) {
+  
+  setData(data, options) {
     const lineDatas = Object.keys(data).map((key, index) => {
+      if (!data[key]) {
+        return {};
+      }
       const labels = data[key].map((d) => {
         return d["name"];
       });
       const values = data[key].map((d) => {
         return d["value"];
       });
-
+      
       return {
         type: "scatter",
         mode: "lines",
@@ -40,11 +43,16 @@ class ChartLine extends HTMLElement {
         line: {
           color: colors[index % colors.length],
           width: 3
-        }
+        },
+        showlegend: true
       };
     });
     
     const layout = {
+      width: options["width"] || 320,
+      margin: {
+        l: 32
+      },
       xaxis: {
         // 日付型の場合のみこのフォーマットが適用される
         tickformat: "%Y/%m/%d"
