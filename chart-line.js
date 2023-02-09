@@ -44,14 +44,15 @@ class ChartLine extends HTMLElement {
           color: colors[index % colors.length],
           width: 3
         },
-        showlegend: true
+        showlegend: options["showlegend"] == undefined ? true : options["showlegend"]
       };
     });
     
     const layout = {
       width: options["width"] || 320,
       margin: {
-        l: 32
+        l: 32,
+        r: 32
       },
       xaxis: {
         // 日付型の場合のみこのフォーマットが適用される
