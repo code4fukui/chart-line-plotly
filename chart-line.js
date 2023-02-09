@@ -59,6 +59,11 @@ class ChartLine extends HTMLElement {
         tickformat: "%Y/%m/%d"
       }
     };
+    
+    if (options["legend"]) {
+      layout.legend = options["legend"];
+    }
+
     Plotly.newPlot(this, lineDatas, layout);
   }
 }
