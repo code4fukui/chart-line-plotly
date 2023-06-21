@@ -1,4 +1,5 @@
-import "https://cdn.plot.ly/plotly-2.15.1.min.js";
+//import "https://cdn.plot.ly/plotly-2.15.1.min.js";
+import "https://code4fukui.github.io/plotly.js/dist/plotly.min.js";
 
 const colors = [
   "#A4BBBD",
