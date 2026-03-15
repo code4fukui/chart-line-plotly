@@ -1,9 +1,11 @@
 # chart-line-plotly
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 A custom HTML element that renders a line chart using Plotly.js.
 
 ## Demo
-You can see a demo of the chart-line tag in the `index.html` file.
+You can see a demo of the `<chart-line>` tag in the `index.html` file.
 
 ## Features
 - Renders a line chart from JSON data
