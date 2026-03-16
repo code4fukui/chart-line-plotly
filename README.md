@@ -48,4 +48,4 @@ You can also pass options to the chart:
 This project uses the [Plotly.js](https://plotly.com) library to render the line charts.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+MIT License — see [LICENSE](LICENSE).
